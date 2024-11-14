@@ -14,8 +14,8 @@ class SongViewSet(viewsets.ModelViewSet):
 class PlayListViewSet(viewsets.ModelViewSet):
     queryset = Playlist.objects.all()
     serializer_class = PlayListSerializer
-    permission_classes = (permissions.IsAuthenticated)
+    permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        
+
