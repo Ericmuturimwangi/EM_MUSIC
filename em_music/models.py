@@ -10,6 +10,7 @@ class Song (models.Model):
     release_date = models.DateField()
     genre = models.CharField(max_length=255, blank=True)
     media_file = models.FileField(upload_to='songs/media', blank=True, null=True)
+    favorited_by = models.ManyToManyField(User, related_name='favorite_songs', blank=True)
 
     def __str__(self):
         return f"{self.title} {self.artist}"
