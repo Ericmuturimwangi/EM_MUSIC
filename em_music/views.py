@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from .serializers import PlayListSerializer, SongSerializer
-from .models import Song, Playlist
+from .serializers import PlayListSerializer, SongSerializer, PlayHistorySerializer
+from .models import Song, Playlist, PlayHistory
 from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import action
 
@@ -35,4 +35,11 @@ class PlayListViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class PlayHistoryViewSet(viewsets.ModelViewSet):
+    serializer_class = PlayHistorySerializer
+
+
+    def get_queryset(self):
+        return PlayHistory.objects.filter(user=self.request.user)
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Song, Playlist
+from .models import Song, Playlist, PlayHistory
 
 class SongSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,3 +15,8 @@ class PlayListSerializer(serializers.ModelSerializer):
         model = Playlist
         fields = ['id', 'name', 'songs', 'created_at']
 
+class PlayHistorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PlayHistory
+        fields  = ['id', 'name', 'songs', 'played_at']

@@ -24,3 +24,13 @@ class Playlist(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Playlist - {self.name}"
+
+
+class PlayHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+    played_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} played {self.song.title} at {self.played_at}"
+    
