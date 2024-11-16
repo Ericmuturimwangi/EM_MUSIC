@@ -90,5 +90,11 @@ class MusicAppTests(APITestCase):
 
 
     def test_ordering_playlist(self):
-        response = self.client.get(self.playlist_url, {'ordering': '-created_at'})
+        response = self.client.get(
+            self.playlist_url,
+            {'ordering': 'created_at'},
+            HTTP_AUTHORIZATION=f'Bearer {self.token}'
+        )
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        

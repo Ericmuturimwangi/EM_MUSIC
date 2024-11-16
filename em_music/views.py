@@ -19,7 +19,7 @@ class PlayListViewSet(viewsets.ModelViewSet):
     # search features
     search_fileds = ['name','songs__title' ]
     ordering_fields = ['created_at', 'name']
-
+    odering = ['-created_at']
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
