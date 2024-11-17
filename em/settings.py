@@ -1,3 +1,4 @@
+import os
 
 from pathlib import Path
 
@@ -32,6 +33,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_filters',
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':(
