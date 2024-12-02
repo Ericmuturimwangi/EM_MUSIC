@@ -34,3 +34,23 @@ class PlayHistory(models.Model):
     def __str__(self):
         return f"{self.user.username} played {self.song.title} at {self.played_at}"
     
+class Track(models.Model):
+    song = models.OneToOneField(Song, related_name="track", on_delete=models.CASCADE)
+    artist = models.CharField(max_length=255)
+    album = models.CharField(max_length=255)
+    genre = models.CharField(max_length=100)
+    release_date = models.DateField()
+    file_url = models.URLField()
+    plays = models.PositiveIntegerField(default=0)
+    duration = models.IntegerField()
+    description = models.TextField(blank=True, null=True)
+    lyrics = models.TextField(blank=True, null=True)
+
+
+    def __str__(self):
+        return f"{self.title} by {self.artist}"
+    
+    def increment_play_count(self):
+        self.plays +=1
+        self.save()
+        

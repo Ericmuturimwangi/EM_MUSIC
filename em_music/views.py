@@ -1,9 +1,12 @@
 from django.shortcuts import render
 from .serializers import PlayListSerializer, SongSerializer, PlayHistorySerializer
-from .models import Song, Playlist, PlayHistory
+from .models import Song, Playlist, PlayHistory, Track
 from rest_framework import viewsets, permissions, filters
-
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import action
+from django.http import JsonResponse
+from rest_framework import status
 class SongViewSet(viewsets.ModelViewSet):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
@@ -51,3 +54,61 @@ class SongReccomendationView(APIView):
         recommendations = Song.objects.exclude(id__in=favorite_songs).order_by('?')[:10]
         serializer = SongSerializer(recommendations, many=True, context={'request':request})
         return Response(serializer.data)
+    
+
+class TrackPlayView(APIView):
+    def get(self, request, track_id):
+        try:
+            track = Track.objects.get(id=track_id)
+            track.increment_play_count()
+            return JsonResponse({
+                'track_id': track.id,
+                'title': track.title,
+                'artist': track.artist,
+                'album': track.album,
+                'plays': track.plays,
+                'release_date': track.release_date,
+                'duration': track.duration,
+                'genre': track.genre,
+            })
+        except Track.DoesNotExist:
+            return JsonResponse({'error': 'Track not found'})
+        
+class TopTracksView(APIView):
+    def get(self, request):
+
+        top_track = Track.objects.order_by('-plays')[:10]
+        data= [{
+            'track_id': track.id,
+            'title': track.title,
+            'artist': track.artist,
+            'album': track.album,
+            'plays': track.plays,
+            'release_date': track.release_date,
+            'duration': track.duration,
+            'genre': track.genre
+        }for track in top_track]
+
+        return JsonResponse({'top_track': data})
+    
+
+class TrackDetailView(APIView):
+    def get(self, request, track_id):
+        try:
+            track = Track.objects.get(id=track_id)
+            return JsonResponse({
+                'track_id': track.id,
+                'title': track.title,
+                'artist': track.artist,
+                'album': track.album,
+                'plays': track.plays,
+                'release_date': track.release_date,
+                'duration': track.duration,
+                'genre': track.genre,
+                'cover_art_url': track.cover_art.url if track.cover_art else None,
+                'description': track.description,
+                'lyrics': track.lyrics
+            })
+        except Track.DoesNotExist:
+            return Response({'error': 'Track Not Found'}, sstatus=status.HTTP_404_NOT_FOUND)
+        

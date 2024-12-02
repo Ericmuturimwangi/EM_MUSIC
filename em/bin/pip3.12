@@ -1,4 +1,4 @@
-#!/home/ericmwangi/Documents/projects/EM/em/bin/python3
+#!/home/ericmwangi/Documents/projects/em_music/EM/em/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
