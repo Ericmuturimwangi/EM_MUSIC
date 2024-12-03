@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.http import JsonResponse
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 class SongViewSet(viewsets.ModelViewSet):
     queryset = Song.objects.all()
     serializer_class = SongSerializer
@@ -112,3 +113,15 @@ class TrackDetailView(APIView):
         except Track.DoesNotExist:
             return Response({'error': 'Track Not Found'}, sstatus=status.HTTP_404_NOT_FOUND)
         
+
+class WelcomeMessageView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        first_name = user.first_name or user.username
+        special_message = f"Welcome back, {first_name}! Keep enjoying your favorite tunes!"
+
+        return Response({
+            "message": special_message
+        })
